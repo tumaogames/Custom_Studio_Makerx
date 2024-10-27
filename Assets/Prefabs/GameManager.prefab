@@ -44,3 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94fc0be9ca9d4b47ae2014bb50cc4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentDress: {fileID: 919132149155446097, guid: a2f76e17a4d8ff0408a661e1a9734358,
+    type: 3}
+  _price: 1
+  _height: 1
+  _bust: 1
+  _hip: 1
+  _waist: 1
+  _dressName: 
+  _color: 0
+  saveFilePath: 

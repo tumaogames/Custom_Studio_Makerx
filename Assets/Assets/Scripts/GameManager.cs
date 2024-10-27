@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public GameObject currentDress;
 
-
     public event Action<float> priceOnVariableChanged; // Event for variable changes
     public event Action<string> dressNameOnVariableChanged; // Event for variable changes
     public event Action<float> heightOnVariableChanged; // Event for variable changes
@@ -118,8 +117,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    private string saveFilePath;
+    public string saveFilePath;
 
     private void Start()
     {

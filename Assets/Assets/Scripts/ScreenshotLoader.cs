@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +9,7 @@ public class ScreenshotLoader : MonoBehaviour
 {
     public GameObject imagePrefab; // Assign your prefab with an Image component in the Inspector
     public Transform contentParent; // Assign the parent transform where instantiated images will be placed
+    public string scName;
 
     void Start()
     {
@@ -14,6 +17,20 @@ public class ScreenshotLoader : MonoBehaviour
 
         foreach (string path in jpgScreenshots)
         {
+            scName = path;
+            string pattern = @"(\d{8}_\d{6})";
+
+            Match match = Regex.Match(scName, pattern);
+
+            if (match.Success)
+            {
+                string screenShotName = match.Value;
+                scName = screenShotName; // Should output: 20241026_073349
+            }
+            else
+            {
+                Debug.Log("No match found.");
+            }
             LoadAndInstantiateImage(path);
         }
     }
@@ -35,10 +52,11 @@ public class ScreenshotLoader : MonoBehaviour
 
         // Convert the Texture2D to a Sprite
         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
-
         // Instantiate the prefab and set its image
         GameObject imageInstance = Instantiate(imagePrefab, contentParent);
         Image imageComponent = imageInstance.GetComponent<Image>();
+        ShowPreview showScript = imageInstance.GetComponentInParent<ShowPreview>();
+        showScript.ScreenShotName = scName;
 
         if (imageComponent != null)
         {

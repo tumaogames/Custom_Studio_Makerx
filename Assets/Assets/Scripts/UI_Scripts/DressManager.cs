@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 using Unity.VisualScripting;
+using System.IO;
 
 public class DressManager : MonoBehaviour
 {
@@ -76,38 +77,58 @@ public class DressManager : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach (var dres in dress)
+        if (IsFolderNotEmpty(Application.persistentDataPath))
         {
-            dres.gameObject.SetActive(GameManager.Instance.LoadSceneState(dres.gameObject.name));
-            if (GameManager.Instance.LoadSceneState(dres.gameObject.name))
-            GameManager.Instance.currentDress = dres;
-        }
-
-        foreach (var dresDet in dressDetails)
-        {
-            Debug.Log(GameManager.Instance.LoadUIState().height);
-            switch (dresDet.gameObject.name)
+            foreach (var dres in dress)
             {
-                case "DressName":
-                    GameManager.Instance.dressName = GameManager.Instance.LoadUIState().dressName;
-                    //GameManager.Instance.dressName = GameManager.Instance.LoadUIState().dressName;
-                    break;
-                case "Slider_Height":
-                    GameManager.Instance.height = GameManager.Instance.LoadUIState().height;
-                    break;
-                case "Slider_Bust":
-                    GameManager.Instance.bust = GameManager.Instance.LoadUIState().bust;
-                    break;
-                case "Slider_Hips":
-                    GameManager.Instance.hip = GameManager.Instance.LoadUIState().hip;
-                    break;
-                case "Slider_Waist":
-                    GameManager.Instance.waist = GameManager.Instance.LoadUIState().waist;
-                    break;
-                default:
-                    break;
+                dres.gameObject.SetActive(GameManager.Instance.LoadSceneState(dres.gameObject.name));
+                if (GameManager.Instance.LoadSceneState(dres.gameObject.name))
+                    GameManager.Instance.currentDress = dres;
+            }
+
+            foreach (var dresDet in dressDetails)
+            {
+                Debug.Log(GameManager.Instance.LoadUIState().height);
+                switch (dresDet.gameObject.name)
+                {
+                    case "DressName":
+                        GameManager.Instance.dressName = GameManager.Instance.LoadUIState().dressName;
+                        //GameManager.Instance.dressName = GameManager.Instance.LoadUIState().dressName;
+                        break;
+                    case "Slider_Height":
+                        GameManager.Instance.height = GameManager.Instance.LoadUIState().height;
+                        break;
+                    case "Slider_Bust":
+                        GameManager.Instance.bust = GameManager.Instance.LoadUIState().bust;
+                        break;
+                    case "Slider_Hips":
+                        GameManager.Instance.hip = GameManager.Instance.LoadUIState().hip;
+                        break;
+                    case "Slider_Waist":
+                        GameManager.Instance.waist = GameManager.Instance.LoadUIState().waist;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+        
+    }
+    private bool IsFolderNotEmpty(string path)
+    {
+        // Check if the folder exists
+        if (Directory.Exists(path))
+        {
+            // Get all files in the directory
+            string[] files = Directory.GetFiles(path);
+            // Get all subdirectories in the directory
+            string[] directories = Directory.GetDirectories(path);
 
+            // Return true if there are any files or directories
+            return files.Length > 0 || directories.Length > 0;
+        }
+
+        // Return false if the directory does not exist
+        return false;
     }
 }

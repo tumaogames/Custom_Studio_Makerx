@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 5962189950911720805}
   - component: {fileID: 2701968276373259985}
   - component: {fileID: 6213818656981119106}
+  - component: {fileID: 4648322473043110678}
   m_Layer: 0
   m_Name: ScreenShot
   m_TagString: Untagged
@@ -331,3 +332,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 9
+--- !u!114 &4648322473043110678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9182876779116476418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b34a08ca8c90ce64aafdda6d727322fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previewBtn: {fileID: 373679732323987816}
+  ScreenShotName: 
