@@ -5,6 +5,8 @@ using System.IO;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 
 public class GameManageraccessories : MonoBehaviour
@@ -16,6 +18,17 @@ public class GameManageraccessories : MonoBehaviour
     public TMP_Text totalPrice;
     public TMP_Text LTypeDisp;
     public TMP_Text LenghtDisp;
+    public string ringType;
+    public string ringStone;
+    public string ringSize;
+    public string ringTotalPrice;
+    public string ringColor;
+    public int ringTypePrice;
+    public int ringStonePrice;
+    public int TotalPrice;
+    public TMP_Text TotalPriceText;
+    public bool isRing;
+    public bool isNecLace;
 
 
     public event Action<float> priceOnVariableChanged; // Event for variable changes
@@ -129,7 +142,22 @@ public class GameManageraccessories : MonoBehaviour
 
     private void Start()
     {
-        //saveFilePath = Application.persistentDataPath + "/20241026_073349.json";
+        saveFilePath = Application.persistentDataPath + "/20241026_073349.json";
+        if (IsCurrentScene("Accessory_Studio_Scene"))
+        {
+            CalculatePrice();
+        }
+        if (IsCurrentScene("Clothing_Studio_Scene"))
+        {
+            GameManageraccessories.Instance.isRing = false;
+            GameManageraccessories.Instance.isNecLace = false;
+            CalculatePrice();
+        }
+    }
+
+    bool IsCurrentScene(string sceneName)
+    {
+        return SceneManager.GetActiveScene().name == sceneName;
     }
 
     void Update()
@@ -236,5 +264,45 @@ public class GameManageraccessories : MonoBehaviour
     public void DisplayLenght(string val)
     {
         LenghtDisp.text = "Lenght: " + val;
+    }
+
+    public void SetRingType(string rType)
+    {
+        this.ringType = rType;
+    }
+
+    public void SetRingColor(string rColor)
+    {
+        this.ringColor = rColor;
+    }
+
+    public void SetRingSize(string rRingType)
+    {
+        this.ringType = rRingType;
+    }
+
+    public void SetRingStone(string rRingStone)
+    {
+        this.ringStone = rRingStone;
+    }
+
+    public void setRingTypePrice(int rTypePrice)
+    {
+        this.ringTypePrice = rTypePrice;
+        CalculatePrice();
+    }
+
+    public void setRingStonePrice(int rStonePrice)
+    {
+        this.ringStonePrice = rStonePrice;
+        CalculatePrice();
+    }
+
+    public void CalculatePrice()
+    {
+        // Define Philippine culture
+        CultureInfo phCulture = new CultureInfo("en-PH");
+        TotalPrice = ringTypePrice + ringStonePrice;
+        TotalPriceText.text = "Total: " + TotalPrice.ToString("C", phCulture);
     }
 }

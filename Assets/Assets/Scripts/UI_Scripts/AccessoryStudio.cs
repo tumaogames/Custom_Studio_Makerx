@@ -20,12 +20,16 @@ public class AccessoryStudio : MonoBehaviour
     {
         RingCanvas.SetActive(true);
         NeckCanvas.SetActive(false);
+        GameManageraccessories.Instance.isRing = true;
+        GameManageraccessories.Instance.isNecLace = false;
     }
 
     public void ShowNeckCanvas()
     {
         RingCanvas.SetActive(false);
         NeckCanvas.SetActive(true);
+        GameManageraccessories.Instance.isRing = false;
+        GameManageraccessories.Instance.isNecLace = true;
     }
 }
 

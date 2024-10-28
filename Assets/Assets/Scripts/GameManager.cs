@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        saveFilePath = Application.persistentDataPath + "/20241026_073349.json";
+        saveFilePath = Application.persistentDataPath + "/20241029_042543.json";
     }
 
     void Update()
@@ -188,7 +188,6 @@ public class GameManager : MonoBehaviour
 
             // Clear the current scene and instantiate objects from the saved data
             data = sceneData.objectsUI[0];
-
         }
         return data;
     }

@@ -18,7 +18,7 @@ public class ScreenshotLoader : MonoBehaviour
         foreach (string path in jpgScreenshots)
         {
             scName = path;
-            string pattern = @"(\d{8}_\d{6})";
+            string pattern = @"(\d{8}_\d{6}(?:_\d+)?)";
 
             Match match = Regex.Match(scName, pattern);
 

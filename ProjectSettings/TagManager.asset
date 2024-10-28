@@ -10,6 +10,8 @@ TagManager:
   - destinationTag
   - deleteTag
   - DeleteArea
+  - SaveableUIRing
+  - SaveableRing
   layers:
   - Default
   - TransparentFX

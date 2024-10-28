@@ -13,6 +13,8 @@ public class SaveSceneWithScreenshot : MonoBehaviour
     // List to hold data of all game objects that you want to save
     public List<GameObjectData> sceneObjectsData = new List<GameObjectData>();
     public List<GameObjectDataUI> sceneObjectsDataUI = new List<GameObjectDataUI>();
+    public List<GameObjectDataRing> sceneObjectsDataRing = new List<GameObjectDataRing>();
+    public List<GameObjectDataUIRing> sceneObjectsDataUIRing = new List<GameObjectDataUIRing>();
     private string saveFilePath;
     public DressManager dm;
     // URL to send the request to
@@ -36,12 +38,70 @@ public class SaveSceneWithScreenshot : MonoBehaviour
 
     public void Save()
     {
-        string screenshotName = CaptureScreenshot(); // Capture the screenshot and get its name
-        SaveSceneState(screenshotName); // Save the scene state with the screenshot name
+        Debug.Log("start ring");
+        string screenshotName; // Capture the screenshot and get its name
+        if (!GameManageraccessories.Instance.isRing)
+        {
+            Debug.Log("not ring");
+            screenshotName = CaptureScreenshot(); // Capture the screenshot and get its name
+            SaveSceneState(screenshotName); // Save the scene state with the screenshot name
+        } else
+        {
+            screenshotName = CaptureScreenshotRing(); // Capture the screenshot and get its name
+            Debug.Log("is ring");
+            SaveSceneStateRing(screenshotName); // Save the scene state with the screenshot name
+        }
+       
     }
 
     // Save the state of objects in the scene, including the screenshot name
     public void SaveSceneState(string screenshotName)
+    {
+        sceneObjectsData.Clear();
+        sceneObjectsDataUI.Clear();
+
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.CompareTag("SaveableRing"))
+            {
+                GameObjectDataRing data = new GameObjectDataRing
+                {
+                    objectName = obj.name,
+                    position = obj.transform.position,
+                    rotation = obj.transform.rotation,
+                    isActive = obj.activeSelf, // Save active state
+                };
+                sceneObjectsDataRing.Add(data);
+                Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);
+            }
+
+            if (obj.CompareTag("SaveableUIRing"))
+            {
+                LogDescendantNames(obj.transform);
+
+                //Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);*/
+            }
+        }
+
+        // Include the screenshot name in the serialized data
+        SceneDataWithScreenshot sceneData = new SceneDataWithScreenshot
+        {
+            objects = sceneObjectsData,
+            objectsUI = sceneObjectsDataUI,
+            screenshotName = screenshotName
+        };
+
+        string json = JsonUtility.ToJson(sceneData, true);
+        jsonData = json;
+        File.WriteAllText(saveFilePath, json);
+
+        Debug.Log("Scene state saved to: " + saveFilePath);
+    }
+
+
+    // Save the state of objects in the scene, including the screenshot name
+    public void SaveSceneStateRing(string screenshotName)
     {
         sceneObjectsData.Clear();
         sceneObjectsDataUI.Clear();
@@ -57,25 +117,30 @@ public class SaveSceneWithScreenshot : MonoBehaviour
                     position = obj.transform.position,
                     rotation = obj.transform.rotation,
                     isActive = obj.activeSelf, // Save active state
-                    isPrefab = IsPrefab(obj) // Save whether the object is a prefab
                 };
                 sceneObjectsData.Add(data);
                 Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);
-            }
-
-            if (obj.CompareTag("SaveableUI"))
-            {
-                LogDescendantNames(obj.transform);
-                
-                //Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);*/
-            }
+            }   
         }
 
-        // Include the screenshot name in the serialized data
-        SceneDataWithScreenshot sceneData = new SceneDataWithScreenshot
+        //LogDescendantNames(obj.transform);
+        GameObjectDataUIRing dataring = new GameObjectDataUIRing
         {
-            objects = sceneObjectsData,
-            objectsUI = sceneObjectsDataUI,
+            ringColor = GameManageraccessories.Instance.ringColor,
+            ringType = GameManageraccessories.Instance.ringType,
+            ringStone = GameManageraccessories.Instance.ringStone,
+            ringSize = GameManageraccessories.Instance.ringSize,
+            TotalPrice = GameManageraccessories.Instance.TotalPrice,
+        };
+        sceneObjectsDataUIRing.Add(dataring);
+
+        //Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);*/
+
+        // Include the screenshot name in the serialized data
+        SceneDataWithScreenshotRing sceneData = new SceneDataWithScreenshotRing
+        {
+            objectsRing = sceneObjectsDataRing,
+            objectsUIRing = sceneObjectsDataUIRing,
             screenshotName = screenshotName
         };
 
@@ -132,31 +197,7 @@ public class SaveSceneWithScreenshot : MonoBehaviour
             hip = dhip,
             waist = dwaist // Save whether the object is a prefab
         };
-        sceneObjectsDataUI.Add(data);
-            
-    }
-
-    // Check if the GameObject is a prefab
-    private bool IsPrefab(GameObject obj)
-    {
-        // Check if the object is part of a prefab instance
-        if (PrefabUtility.IsPartOfPrefabInstance(obj))
-        {
-            Debug.Log($"{obj.name} is a prefab instance.");
-            return true; // It's a prefab instance
-        }
-
-        // Check if the object is a prefab asset
-        PrefabAssetType assetType = PrefabUtility.GetPrefabAssetType(obj);
-
-        if (assetType != PrefabAssetType.NotAPrefab)
-        {
-            Debug.Log($"{obj.name} is a prefab asset of type: {assetType}");
-            return true; // It's a prefab asset
-        }
-
-        Debug.Log($"{obj.name} is not a prefab.");
-        return false; // Not a prefab
+        sceneObjectsDataUI.Add(data);      
     }
 
 
@@ -167,6 +208,22 @@ public class SaveSceneWithScreenshot : MonoBehaviour
         saveFilePath = Application.persistentDataPath + "/" + tName + ".json";
         // Define the file name and path for the screenshot
         string screenshotName = "screenshot_" + tName + ".png";
+        string screenshotPath = Application.persistentDataPath + "/" + screenshotName;
+
+        // Take the screenshot and save it to the specified path
+        ScreenCapture.CaptureScreenshot(screenshotPath);
+
+        Debug.Log("Screenshot saved to: " + screenshotPath);
+        return screenshotName; // Return the screenshot name for saving with the scene data
+    }
+
+    // Capture and save a screenshot, returning the screenshot file name
+    public string CaptureScreenshotRing()
+    {
+        var tName = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        saveFilePath = Application.persistentDataPath + "/" + tName + "_1" + ".json";
+        // Define the file name and path for the screenshot
+        string screenshotName = "screenshot_" + tName + "_1.png";
         string screenshotPath = Application.persistentDataPath + "/" + screenshotName;
 
         // Take the screenshot and save it to the specified path
@@ -226,6 +283,17 @@ public class GameObjectData
 
 // Serializable class to hold data about scene objects
 [System.Serializable]
+public class GameObjectDataRing
+{
+    public string objectName;
+    public Vector3 position;
+    public Quaternion rotation;
+    public bool isActive; // To save whether the object is active or not
+    public bool isPrefab; // To save whether the object is a prefab
+}
+
+// Serializable class to hold data about scene objects
+[System.Serializable]
 public class GameObjectDataUI
 {
     public Color color;
@@ -237,12 +305,32 @@ public class GameObjectDataUI
     public float waist;
 }
 
+// Serializable class to hold data about scene objects
+[System.Serializable]
+public class GameObjectDataUIRing
+{
+    public string ringColor;
+    public string ringType;
+    public string ringStone;
+    public string ringSize;
+    public int TotalPrice;
+}
+
 // Class to hold the scene data including the screenshot name
 [System.Serializable]
 public class SceneDataWithScreenshot
 {
     public List<GameObjectData> objects; // List of game object data
     public List<GameObjectDataUI> objectsUI; // List of game object data
+    public string screenshotName; // The name of the saved screenshot
+}
+
+// Class to hold the scene data including the screenshot name
+[System.Serializable]
+public class SceneDataWithScreenshotRing
+{
+    public List<GameObjectDataRing> objectsRing; // List of game object data
+    public List<GameObjectDataUIRing> objectsUIRing; // List of game object data
     public string screenshotName; // The name of the saved screenshot
 }
 

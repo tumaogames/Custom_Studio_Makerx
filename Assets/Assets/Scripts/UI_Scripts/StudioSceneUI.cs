@@ -19,11 +19,15 @@ public class StudioSceneUI : MonoBehaviour
 
     public void GoToClothesScene()
     {
+        GameManageraccessories.Instance.isNecLace = false;
+        GameManageraccessories.Instance.isRing = false;
         SceneManager.LoadScene("Clothing_Studio_Scene");
     }
 
     public void GoToAccessoryScene()
     {
+        GameManageraccessories.Instance.isRing = true;
+        GameManageraccessories.Instance.isNecLace = true;
         SceneManager.LoadScene("Accessory_Studio_Scene");
     }
 
