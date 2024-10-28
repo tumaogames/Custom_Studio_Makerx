@@ -83,11 +83,11 @@ public class RadialMenu : MonoBehaviour
     {
         if (selectedItem != null && Input.GetMouseButton(0)) // While the mouse button is held
         {
-            // Drag the selected item
+            /*// Drag the selected item
             Vector3 mousePosition = Input.mousePosition;
             mousePosition.z = Camera.main.WorldToScreenPoint(selectedItem.transform.position).z;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            selectedItem.transform.position = worldPosition;
+            selectedItem.transform.position = worldPosition;*/
         }
 
         if (Input.GetMouseButtonUp(0)) // On mouse release

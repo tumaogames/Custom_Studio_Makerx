@@ -96,6 +96,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5403253676573179119}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b23cda07b618cc4bbb5903d55513f30,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3950286877917281692}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b23cda07b618cc4bbb5903d55513f30,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2394960971490627654}
   m_SourcePrefab: {fileID: 100100000, guid: 3b23cda07b618cc4bbb5903d55513f30, type: 3}
 --- !u!1 &432590502335677620 stripped
 GameObject:
@@ -118,3 +126,39 @@ MonoBehaviour:
   accname: Pendant
   price: 6000
   stocks: 10
+--- !u!114 &3950286877917281692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432590502335677620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74cd6d27171b5924f8f5def7ff8a7b6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destinationTag: DropArea
+  deleteTag: DeleteArea
+--- !u!64 &-2394960971490627654
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432590502335677620}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7070535513993583588, guid: 3b23cda07b618cc4bbb5903d55513f30, type: 3}

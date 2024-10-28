@@ -73,7 +73,7 @@ public class AccNeckMenu : MonoBehaviour
             GameManageraccessories.Instance.accessoriesBagList.Add(spawnedItem);
 
             // Optionally set the position of the spawned item in the spawn area
-            spawnedItem.transform.position = spawnArea.position + new Vector3(0, -itemSpawnCount[panelIndex] * 1.5f, 0);
+            spawnedItem.transform.position = spawnArea.position;
 
             // Increase the spawn count for the selected panel
             itemSpawnCount[panelIndex]++;

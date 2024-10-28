@@ -7,6 +7,9 @@ TagManager:
   - DropArea
   - Saveable
   - SaveableUI
+  - destinationTag
+  - deleteTag
+  - DeleteArea
   layers:
   - Default
   - TransparentFX

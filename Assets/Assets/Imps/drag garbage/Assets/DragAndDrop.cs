@@ -2,42 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class DragAndDrop : MonoBehaviour
+public class DragAndDropParent : MonoBehaviour
 {
     Vector3 offset;
     public string destinationTag = "DropArea";
     public string deleteTag = "DeleteArea";
 
-    void OnMouseDown()
-    {
-        offset = transform.position - MouseWorldPosition();
-        transform.GetComponent<Collider>().enabled = false;
-    }
+    // Static flag to allow only one drag at a time
+    private static bool isDragging = false;
+    public Transform selectedObject = null;
 
-    void OnMouseDrag()
+    void Update()
     {
-        transform.position = MouseWorldPosition() + offset;
-    }
-
-    void OnMouseUp()
-    {
-        var rayOrigin = Camera.main.transform.position;
-        var rayDirection = MouseWorldPosition() - Camera.main.transform.position;
-        RaycastHit hitInfo;
-        if (Physics.Raycast(rayOrigin, rayDirection, out hitInfo))
+        if (Input.GetMouseButtonDown(0))
         {
-            if (hitInfo.transform.tag == destinationTag)
-            {
-                transform.position = hitInfo.transform.position;
-            }
+            if (isDragging) return; // Ignore new drag requests if already dragging another object
 
-            if (hitInfo.transform.tag == deleteTag)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                Destroy(gameObject);
+                if (hit.transform.IsChildOf(transform)) // Check if the clicked object is a child of this parent
+                {
+                    selectedObject = hit.transform;
+                    offset = selectedObject.position - MouseWorldPosition();
+                    selectedObject.GetComponent<Collider>().enabled = false;
+                    isDragging = true;
+                }
             }
         }
-        transform.GetComponent<Collider>().enabled = true;
+
+        if (Input.GetMouseButton(0) && selectedObject != null)
+        {
+            // Move the selected object to follow the mouse
+            selectedObject.position = MouseWorldPosition() + offset;
+        }
+
+        if (Input.GetMouseButtonUp(0) && selectedObject != null)
+        {
+            // Release the selected object
+            var rayOrigin = Camera.main.transform.position;
+            var rayDirection = MouseWorldPosition() - Camera.main.transform.position;
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(rayOrigin, rayDirection, out hitInfo))
+            {
+                if (hitInfo.transform.CompareTag(destinationTag))
+                {
+                    selectedObject.position = hitInfo.transform.position;
+                }
+                else if (hitInfo.transform.CompareTag(deleteTag))
+                {
+                    Destroy(selectedObject.gameObject);
+                }
+            }
+
+            selectedObject.GetComponent<Collider>().enabled = true;
+            selectedObject = null;
+            isDragging = false; // Allow other objects to be dragged
+        }
     }
 
     Vector3 MouseWorldPosition()
@@ -46,5 +70,4 @@ public class DragAndDrop : MonoBehaviour
         mouseScreenPos.z = Camera.main.WorldToScreenPoint(transform.position).z;
         return Camera.main.ScreenToWorldPoint(mouseScreenPos);
     }
-
 }
