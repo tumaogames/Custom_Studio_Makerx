@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        saveFilePath = Application.persistentDataPath + "/20241029_042543.json";
+        saveFilePath = Application.persistentDataPath + "/20241029_042806.json";
     }
 
     void Update()

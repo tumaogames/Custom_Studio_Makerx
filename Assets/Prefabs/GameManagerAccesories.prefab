@@ -59,6 +59,7 @@ MonoBehaviour:
   TotalPrice: 0
   TotalPriceText: {fileID: 0}
   isRing: 0
+  isNecLace: 0
   _price: 1
   _height: 1
   _bust: 1
