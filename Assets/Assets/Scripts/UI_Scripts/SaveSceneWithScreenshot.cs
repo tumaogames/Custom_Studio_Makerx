@@ -63,20 +63,20 @@ public class SaveSceneWithScreenshot : MonoBehaviour
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
         foreach (GameObject obj in allObjects)
         {
-            if (obj.CompareTag("SaveableRing"))
+            if (obj.CompareTag("Saveable"))
             {
-                GameObjectDataRing data = new GameObjectDataRing
+                GameObjectData data = new GameObjectData
                 {
                     objectName = obj.name,
                     position = obj.transform.position,
                     rotation = obj.transform.rotation,
                     isActive = obj.activeSelf, // Save active state
                 };
-                sceneObjectsDataRing.Add(data);
+                sceneObjectsData.Add(data);
                 Debug.Log("GameObject Name: " + obj.name + ", Position: " + obj.transform.position);
             }
 
-            if (obj.CompareTag("SaveableUIRing"))
+            if (obj.CompareTag("SaveableUI"))
             {
                 LogDescendantNames(obj.transform);
 
@@ -266,8 +266,6 @@ public class SaveSceneWithScreenshot : MonoBehaviour
             }
         }
     }
-
-
 }
 
 // Serializable class to hold data about scene objects
@@ -278,7 +276,7 @@ public class GameObjectData
     public Vector3 position;
     public Quaternion rotation;
     public bool isActive; // To save whether the object is active or not
-    public bool isPrefab; // To save whether the object is a prefab
+    //public bool isPrefab; // To save whether the object is a prefab
 }
 
 // Serializable class to hold data about scene objects
